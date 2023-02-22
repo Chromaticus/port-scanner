@@ -8,7 +8,10 @@ subprocess.call('clear', shell=True)
 
 #Asks for input
 remoteServer = input("Enter a remote host to scan: ")
-remoteServerIP = socket.gethostbyname(remoteServer)
+
+#Resolve the host name to an IP address using getaddrinfo()
+addrinfo = socket.getaddrinfo(remoteServer, 0, socket.AF_UNSPEC, socket.SOCK_STREAM)
+remoteServerIP = addrinfo[0][4][0]
 
 #Prints a banner with information on which host we are about to scan
 print ("_" * 60)
@@ -22,7 +25,7 @@ t1 = datetime.now()
 #Also we will do error handling
 
 try:
-    for port in range (1,5000):
+    for port in range (0,65534):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     result = sock.connect_ex((remoteServerIP, port))
     if result ==0:
